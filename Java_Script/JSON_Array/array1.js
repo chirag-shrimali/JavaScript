@@ -1,0 +1,96 @@
+var departments = [
+    {
+        name:"IT",
+        employees:[
+            {
+                name:"amit",
+                age:23,
+                gender:"male",
+                isActive:true,
+                isMarried:true,
+                child:2
+            },
+            {
+                name:"sumit",
+                age:25,
+                gender:"male",
+                isActive:true,
+                isMarried:true,
+                child:1
+            },
+            {
+                name:"seeta",
+                age:26,
+                gender:"female",
+                isActive:true,
+                isMarried:false,
+                child:0
+            }
+        ]
+    },
+    {
+        name:"HR",
+        employees:[
+            
+            {
+                name:"geeta",
+                age:32,
+                gender:"female",
+                isActive:true,
+                isMarried:true,
+                child:0
+            },
+            {
+                name:"harita",
+                age:36,
+                gender:"female",
+                isActive:false,
+                isMarried:false,
+                child:0
+            },
+        ]
+    },
+    {
+        name:"Finance",
+        employees:[
+            
+            {
+                name:"siya",
+                age:35,
+                gender:"female",
+                isActive:true,
+                isMarried:true,
+                child:2
+            },
+            {
+                name:"axit",
+                age:37,
+                gender:"male",
+                isActive:true,
+                isMarried:true,
+                child:5
+            },
+            {
+                name:"payal",
+                age:39,
+                gender:"female",
+                isActive:true,
+                isMarried:false,
+                child:0
+            },
+            {
+                name:"sunit",
+                age:42,
+                gender:"male",
+                isActive:false,
+                isMarried:false,
+                child:0
+            }
+            
+        ]
+    },
+]
+
+let ans = departments.map((dep)=>dep.employees.reduce((sum , emp)=>sum + emp.child , 0)).reduce((total , emp)=>total + emp , 0)
+
+console.log(ans);

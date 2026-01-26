@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Sender || Html & Js</title>
+    <style>
+        *{
+            padding:10px;
+        }
+    </style>
+    <script src="./email.js"></script>
+</head>
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+</script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init({
+        publicKey: "U2ikI-vPNZ39dRqgS",
+      });
+   })();
+</script>
+<body>
+
+    <div>
+        <label for="">Name :- </label>
+        <input type="text" id="name" placeholder="Enter Your Name here...">
+    </div>
+
+    <div>
+        <label for="">Email :- </label>
+        <input type="text" id="email" placeholder="Enter Your Email here...">
+    </div>
+
+    <div>
+        <label for="">Message :-</label>
+        <textarea name="" id="Message" placeholder="Write Your Feedback here..."></textarea>
+    </div>
+
+    <div>
+        <button onclick="getsubmit()">Submit</button>
+    </div>
+    
+</body>
+</html>

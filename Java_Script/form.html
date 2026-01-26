@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form | Html & Js</title>
+    <style>
+      body {
+        padding: 20px;
+        margin-top: 20px;
+      }
+
+      input {
+        margin: 10px;
+      }
+    </style>
+    <script src="./form.js" defer></script>
+  </head>
+  <body>
+    <form id="userForm">
+      <div class="box">
+        <label>Name:</label>
+        <input type="text" id="name" placeholder="Enter Your Name" />
+      </div>
+
+      <div class="box">
+        <label>Email:</label>
+        <input type="email" id="email" placeholder="Enter Your Email" />
+      </div>
+
+      <div class="box">
+        <label>Password:</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter Your Password"
+        />
+      </div>
+
+      <div class="box">
+        <label>Age:</label>
+        <input type="number" id="age" placeholder="Enter Your Age" />
+      </div>
+
+      <div class="box">
+        <label>Gender:</label>
+        <input type="text" id="gender" placeholder="Enter Your Gender" />
+      </div>
+
+      <div class="box">
+        <button type="button" id="get_data">Post Data</button>
+      </div>
+    </form>
+  </body>
+</html>

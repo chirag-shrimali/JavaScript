@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2.8rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .choices {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .choice {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            width: 150px;
+        }
+
+        .choice:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .choice img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .choice p {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .vs {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .player-choice, .computer-choice {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .player-choice img, .computer-choice img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+        }
+
+        .vs-text {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .result {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            min-height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .win {
+            color: #27ae60;
+        }
+
+        .lose {
+            color: #e74c3c;
+        }
+
+        .tie {
+            color: #f39c12;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .score {
+            font-size: 1.5rem;
+        }
+
+        .reset-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 10px;
+        }
+
+        .reset-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 600px) {
+            .choices {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .vs {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rock Paper Scissors</h1>
+        
+        <div class="game-area">
+            <div class="choices">
+                <div class="choice" data-choice="rock">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCBmaWxsPSJub25lIiBoZWlnaHQ9IjI1NiIgd2lkdGg9IjI1NiIvPjxwYXRoIGZpbGw9IiM5NTAiIGQ9Ik0xOTIgMTYwYTE2IDE2IDAgMCAxLTE2IDE2SDgwYTE2IDE2IDAgMCAxLTE2LTE2di0zMmExNiAxNiAwIDAgMSAxNi0xNmg5NmExNiAxNiAwIDAgMSAxNiAxNnYzMnoiIG9wYWNpdHk9Ii4yIi8+PHBhdGggZmlsbD0iI2E1ODIzYSIgZD0iTTE5MiAxNjBhMTYgMTYgMCAwIDEtMTYgMTZINzJhMTYgMTYgMCAwIDEtMTYtMTZ2LTMyYTE2IDE2IDAgMCAxIDE2LTE2aDEwNGExNiAxNiAwIDAgMSAxNiAxNnYzMnoiLz48cGF0aCBmaWxsPSIjZmZiYzA5IiBkPSJNMjA4IDE0NGExNiAxNiAwIDAgMS0xNiAxNkg2NGExNiAxNiAwIDAgMS0xNi0xNnYtMzJhMTYgMTYgMCAwIDEgMTYtMTZoMTI4YTE2IDE2IDAgMCAxIDE2IDE2djMyeiIvPjxwYXRoIGZpbGw9IiNmZmNjMDkiIGQ9Ik0yMDggMTEyYTE2IDE2IDAgMCAxLTE2IDE2SDY0YTE2IDE2IDAgMCAxLTE2LTE2VjY0YTE2IDE2IDAgMCAxIDE2LTE2aDEyOGExNiAxNiAwIDAgMSAxNiAxNnY0OHoiLz48cGF0aCBmaWxsPSIjZTY1ZjAwIiBkPSJNMjA4IDY0YTE2IDE2IDAgMCAxLTE2IDE2SDY0YTE2IDE2IDAgMCAxLTE2LTE2VjQ4YTE2IDE2IDAgMCAxIDE2LTE2aDEyOGExNiAxNiAwIDAgMSAxNiAxNnYxNnoiLz48L3N2Zz4=" alt="Rock">
+                    <p>Rock</p>
+                </div>
+                <div class="choice" data-choice="paper">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCBmaWxsPSJub25lIiBoZWlnaHQ9IjI1NiIgd2lkdGg9IjI1NiIvPjxwYXRoIGZpbGw9IiM5NTAiIGQ9Ik0yMDggMTYwYTE2IDE2IDAgMCAxLTE2IDE2SDY0YTE2IDE2IDAgMCAxLTE2LTE2VjgwYTE2IDE2IDAgMCAxIDE2LTE2aDEyOGExNiAxNiAwIDAgMSAxNiAxNnY4MHoiIG9wYWNpdHk9Ii4yIi8+PHBhdGggZmlsbD0iIzM0OThkYyIgZD0iTTIyNCAxNDRhMTYgMTYgMCAwIDEtMTYgMTZINDhhMTYgMTYgMCAwIDEtMTYtMTZWOTZhMTYgMTYgMCAwIDEgMTYtMTZoMTYwYTE2IDE2IDAgMCAxIDE2IDE2djQ4eiIvPjxwYXRoIGZpbGw9IiM2NGJiZmYiIGQ9Ik0yMjQgOTZhMTYgMTYgMCAwIDEtMTYgMTZINDhhMTYgMTYgMCAwIDEtMTYtMTZWNDhhMTYgMTYgMCAwIDEgMTYtMTZoMTYwYTE2IDE2IDAgMCAxIDE2IDE2djQ4eiIvPjxwYXRoIGZpbGw9IiM0MmE1ZjUiIGQ9Ik0yMjQgNDhhMTYgMTYgMCAwIDEtMTYgMTZINDhhMTYgMTYgMCAwIDEtMTYtMTZWMzJhMTYgMTYgMCAwIDEgMTYtMTZoMTYwYTE2IDE2IDAgMCAxIDE2IDE2djE2eiIvPjwvc3ZnPg==" alt="Paper">
+                    <p>Paper</p>
+                </div>
+                <div class="choice" data-choice="scissors">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCBmaWxsPSJub25lIiBoZWlnaHQ9IjI1NiIgd2lkdGg9IjI1NiIvPjxwYXRoIGZpbGw9IiM5NTAiIGQ9Ik0xOTIgMTYwYTE2IDE2IDAgMCAxLTE2IDE2SDY0YTE2IDE2IDAgMCAxLTE2LTE2di0zMmExNiAxNiAwIDAgMSAxNi0xNmgxMTJhMTYgMTYgMCAwIDEgMTYgMTZ2MzJ6IiBvcGFjaXR5PSIuMiIvPjxwYXRoIGZpbGw9IiNhNTgyM2EiIGQ9Ik0xOTIgMTI4YTE2IDE2IDAgMCAxLTE2IDE2SDY0YTE2IDE2IDAgMCAxLTE2LTE2VjgwYTE2IDE2IDAgMCAxIDE2LTE2aDExMmExNiAxNiAwIDAgMSAxNiAxNnY0OHoiLz48cGF0aCBmaWxsPSIjZmZiYzA5IiBkPSJNMjA4IDgwYTE2IDE2IDAgMCAxLTE2IDE2SDY0YTE2IDE2IDAgMCAxLTE2LTE2VjQ4YTE2IDE2IDAgMCAxIDE2LTE2aDEyOGExNiAxNiAwIDAgMSAxNiAxNnYzMnoiLz48cGF0aCBmaWxsPSIjZmZjYzA5IiBkPSJNMjA4IDQ4YTE2IDE2IDAgMCAxLTE2IDE2SDY0YTE2IDE2IDAgMCAxLTE2LTE2VjMyYTE2IDE2IDAgMCAxIDE2LTE2aDEyOGExNiAxNiAwIDAgMSAxNiAxNnYxNnoiLz48cGF0aCBmaWxsPSIjZTY1ZjAwIiBkPSJNMTEyIDI0YTggOCAwIDAgMS04IDhINjRhOCA4IDAgMCAxLTgtOHYtMTZhOCA4IDAgMCAxIDgtOEgxMDRhOCA4IDAgMCAxIDggOHYxNnoiLz48L3N2Zz4=" alt="Scissors">
+                    <p>Scissors</p>
+                </div>
+            </div>
+            
+            <div class="vs">
+                <div class="player-choice">
+                    <h3>Your Choice</h3>
+                    <img id="player-img" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCBmaWxsPSIjZGRkIiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgcng9IjEyIiByeT0iMTIiLz48dGV4dCB4PSIxMjgiIHk9IjEzMCIgZm9udCZhbXA7ZmFtaWx5PSJBcmlhbCIgZm9udCZhbXA7c2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5OTkiPj88L3RleHQ+PC9zdmc+" alt="Your Choice">
+                </div>
+                <div class="vs-text">VS</div>
+                <div class="computer-choice">
+                    <h3>Computer Choice</h3>
+                    <img id="computer-img" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCBmaWxsPSIjZGRkIiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgcng9IjEyIiByeT0iMTIiLz48dGV4dCB4PSIxMjgiIHk9IjEzMCIgZm9udCZhbXA7ZmFtaWxseT0iQXJpYWwiIGZvbnQmYW1wO3NpemU9IjI0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5Ij4/PC90ZXh0Pjwvc3ZnPg==" alt="Computer Choice">
+                </div>
+            </div>
+            
+            <div class="result" id="result">Make your choice!</div>
+            
+            <div class="score-board">
+                <div class="score">
+                    <h3>Your Score</h3>
+                    <p id="player-score">0</p>
+                </div>
+                <div class="score">
+                    <h3>Computer Score</h3>
+                    <p id="computer-score">0</p>
+                </div>
+            </div>
+            
+            <button class="reset-btn" id="reset-btn">Reset Game</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const choices = document.querySelectorAll('.choice');
+            const playerImg = document.getElementById('player-img');
+            const computerImg = document.getElementById('computer-img');
+            const resultDisplay = document.getElementById('result');
+            const playerScoreDisplay = document.getElementById('player-score');
+            const computerScoreDisplay = document.getElementById('computer-score');
+            const resetBtn = document.getElementById('reset-btn');
+            
+            let playerScore = 0;
+            let computerScore = 0;
+            
+            // Image data for choices
+            const choiceImages = {
+                rock: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCBmaWxsPSJub25lIiBoZWlnaHQ9IjI1NiIgd2lkdGg9IjI1NiIvPjxwYXRoIGZpbGw9IiM5NTAiIGQ9Ik0xOTIgMTYwYTE2IDE2IDAgMCAxLTE2IDE2SDgwYTE2IDE2IDAgMCAxLTE2LTE2di0zMmExNiAxNiAwIDAgMSAxNi0xNmg5NmExNiAxNiAwIDAgMSAxNiAxNnYzMnoiIG9wYWNpdHk9Ii4yIi8+PHBhdGggZmlsbD0iI2E1ODIzYSIgZD0iTTE5MiAxNjBhMTYgMTYgMCAwIDEtMTYgMTZINzJhMTYgMTYgMCAwIDEtMTYtMTZ2LTMyYTE2IDE2IDAgMCAxIDE2LTE2aDEwNGExNiAxNiAwIDAgMSAxNiAxNnYzMnoiLz48cGF0aCBmaWxsPSIjZmZiYzA5IiBkPSJNMjA4IDE0NGExNiAxNiAwIDAgMS0xNiAxNkg2NGExNiAxNiAwIDAgMS0xNi0xNnYtMzJhMTYgMTYgMCAwIDEgMTYtMTZoMTI4YTE2IDE2IDAgMCAxIDE2IDE2djMyeiIvPjxwYXRoIGZpbGw9IiNmZmNjMDkiIGQ9Ik0yMDggMTEyYTE2IDE2IDAgMCAxLTE2IDE2SDY0YTE2IDE2IDAgMCAxLTE2LTE2VjY0YTE2IDE2IDAgMCAxIDE2LTE2aDEyOGExNiAxNiAwIDAgMSAxNiAxNnY0OHoiLz48cGF0aCBmaWxsPSIjZTY1ZjAwIiBkPSJNMjA4IDY0YTE2IDE2IDAgMCAxLTE2IDE2SDY0YTE2IDE2IDAgMCAxLTE2LTE2VjQ4YTE2IDE2IDAgMCAxIDE2LTE2aDEyOGExNiAxNiAwIDAgMSAxNiAxNnYxNnoiLz48L3N2Zz4=",
+                paper: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCBmaWxsPSJub25lIiBoZWlnaHQ9IjI1NiIgd2lkdGg9IjI1NiIvPjxwYXRoIGZpbGw9IiM5NTAiIGQ9Ik0yMDggMTYwYTE2IDE2IDAgMCAxLTE2IDE2SDY0YTE2IDE2IDAgMCAxLTE2LTE2VjgwYTE2IDE2IDAgMCAxIDE2LTE2aDEyOGExNiAxNiAwIDAgMSAxNiAxNnY4MHoiIG9wYWNpdHk9Ii4yIi8+PHBhdGggZmlsbD0iIzM0OThkYyIgZD0iTTIyNCAxNDRhMTYgMTYgMCAwIDEtMTYgMTZINDhhMTYgMTYgMCAwIDEtMTYtMTZWOTZhMTYgMTYgMCAwIDEgMTYtMTZoMTYwYTE2IDE2IDAgMCAxIDE2IDE2djQ4eiIvPjxwYXRoIGZpbGw9IiM2NGJiZmYiIGQ9Ik0yMjQgOTZhMTYgMTYgMCAwIDEtMTYgMTZINDhhMTYgMTYgMCAwIDEtMTYtMTZWNDhhMTYgMTYgMCAwIDEgMTYtMTZoMTYwYTE2IDE2IDAgMCAxIDE2IDE2djQ4eiIvPjxwYXRoIGZpbGw9IiM0MmE1ZjUiIGQ9Ik0yMjQgNDhhMTYgMTYgMCAwIDEtMTYgMTZINDhhMTYgMTYgMCAwIDEtMTYtMTZWMzJhMTYgMTYgMCAwIDEgMTYtMTZoMTYwYTE2IDE2IDAgMCAxIDE2IDE2djE2eiIvPjwvc3ZnPg==",
+                scissors: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCBmaWxsPSJub25lIiBoZWlnaHQ9IjI1NiIgd2lkdGg9IjI1NiIvPjxwYXRoIGZpbGw9IiM5NTAiIGQ9Ik0xOTIgMTYwYTE2IDE2IDAgMCAxLTE2IDE2SDY0YTE2IDE2IDAgMCAxLTE2LTE2di0zMmExNiAxNiAwIDAgMSAxNi0xNmgxMTJhMTYgMTYgMCAwIDEgMTYgMTZ2MzJ6IiBvcGFjaXR5PSIuMiIvPjxwYXRoIGZpbGw9IiNhNTgyM2EiIGQ9Ik0xOTIgMTI4YTE2IDE2IDAgMCAxLTE2IDE2SDY0YTE2IDE2IDAgMCAxLTE2LTE2VjgwYTE2IDE2IDAgMCAxIDE2LTE2aDExMmExNiAxNiAwIDAgMSAxNiAxNnY0OHoiLz48cGF0aCBmaWxsPSIjZmZiYzA5IiBkPSJNMjA4IDgwYTE2IDE2IDAgMCAxLTE2IDE2SDY0YTE2IDE2IDAgMCAxLTE2LTE2VjQ4YTE2IDE2IDAgMCAxIDE2LTE2aDEyOGExNiAxNiAwIDAgMSAxNiAxNnYzMnoiLz48cGF0aCBmaWxsPSIjZmZjYzA5IiBkPSJNMjA4IDQ4YTE2IDE2IDAgMCAxLTE2IDE2SDY0YTE2IDE2IDAgMCAxLTE2LTE2VjMyYTE2IDE2IDAgMCAxIDE2LTE2aDEyOGExNiAxNiAwIDAgMSAxNiAxNnYxNnoiLz48cGF0aCBmaWxsPSIjZTY1ZjAwIiBkPSJNMTEyIDI0YTggOCAwIDAgMS04IDhINjRhOCA4IDAgMCAxLTgtOHYtMTZhOCA4IDAgMCAxIDgtOEgxMDRhOCA4IDAgMCAxIDggOHYxNnoiLz48L3N2Zz4="
+            };
+            
+            // Default image for when no choice is made
+            const defaultImage = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCBmaWxsPSIjZGRkIiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgcng9IjEyIiByeT0iMTIiLz48dGV4dCB4PSIxMjgiIHk9IjEzMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5Ij4/PC90ZXh0Pjwvc3ZnPg==";
+            
+            // Game logic
+            choices.forEach(choice => {
+                choice.addEventListener('click', () => {
+                    const playerChoice = choice.getAttribute('data-choice');
+                    const computerChoice = getComputerChoice();
+                    
+                    // Update images
+                    playerImg.src = choiceImages[playerChoice];
+                    computerImg.src = choiceImages[computerChoice];
+                    
+                    // Determine winner
+                    const result = getWinner(playerChoice, computerChoice);
+                    
+                    // Update scores and display result
+                    updateScore(result);
+                    displayResult(result, playerChoice, computerChoice);
+                });
+            });
+            
+            // Reset button
+            resetBtn.addEventListener('click', resetGame);
+            
+            // Helper functions
+            function getComputerChoice() {
+                const choices = ['rock', 'paper', 'scissors'];
+                const randomIndex = Math.floor(Math.random() * 3);
+                return choices[randomIndex];
+            }
+            
+            function getWinner(player, computer) {
+                if (player === computer) {
+                    return 'tie';
+                }
+                
+                if (
+                    (player === 'rock' && computer === 'scissors') ||
+                    (player === 'paper' && computer === 'rock') ||
+                    (player === 'scissors' && computer === 'paper')
+                ) {
+                    return 'player';
+                } else {
+                    return 'computer';
+                }
+            }
+            
+            function updateScore(result) {
+                if (result === 'player') {
+                    playerScore++;
+                } else if (result === 'computer') {
+                    computerScore++;
+                } else {
+                    // Tie - both get a point
+                    playerScore++;
+                    computerScore++;
+                }
+                
+                playerScoreDisplay.textContent = playerScore;
+                computerScoreDisplay.textContent = computerScore;
+            }
+            
+            function displayResult(result, playerChoice, computerChoice) {
+                if (result === 'player') {
+                    resultDisplay.textContent = `You win! ${playerChoice} beats ${computerChoice}`;
+                    resultDisplay.className = 'result win';
+                } else if (result === 'computer') {
+                    resultDisplay.textContent = `You lose! ${computerChoice} beats ${playerChoice}`;
+                    resultDisplay.className = 'result lose';
+                } else {
+                    resultDisplay.textContent = `It's a tie! Both chose ${playerChoice}`;
+                    resultDisplay.className = 'result tie';
+                }
+            }
+            
+            function resetGame() {
+                playerScore = 0;
+                computerScore = 0;
+                playerScoreDisplay.textContent = playerScore;
+                computerScoreDisplay.textContent = computerScore;
+                resultDisplay.textContent = 'Make your choice!';
+                resultDisplay.className = 'result';
+                playerImg.src = defaultImage;
+                computerImg.src = defaultImage;
+            }
+        });
+    </script>
+</body>
+</html>

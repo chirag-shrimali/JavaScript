@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            /* background-color: black; */
+        }
+        #box{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height:100vh;
+        }
+        button{
+            padding:7px;
+            margin:10px;
+            font-weight: 500;
+            font-size:25px;
+            color:red;
+        }
+        #image{
+            box-shadow: 0 30px 60px rgba(0 , 0 , 0 , 0.7);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="box">
+        <button id="previous">Previous</button>
+        <img src="../Images/image1.jpg" alt="image" id="image" height="500px" width="580px">
+        <button id="next">Next</button>
+    </div>
+
+    <script src="./slider.js"></script>
+    
+</body>
+</html>
