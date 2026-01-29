@@ -1,4 +1,4 @@
-// write the java script program to check that user enter the number is palindrome or not
+// write the java script program to check that user entering the number is palindrome or not
 
 no = parseInt(prompt("\nEnter the No : "));
 
