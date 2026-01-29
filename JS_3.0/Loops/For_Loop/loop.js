@@ -68,9 +68,9 @@ for(let i = 1;i <= no;i++)
     }
 }
 
-print("\nThe EvenNo Sum are :",evenSum);
+console.log("\nThe EvenNo Sum are :",evenSum);
 
-print("\nThe OddNo Sum are :",oddSum);
+console.log("\nThe OddNo Sum are :",oddSum);
 
 // calculate the factorial the number that enter by the user -------------------------------------------
 
