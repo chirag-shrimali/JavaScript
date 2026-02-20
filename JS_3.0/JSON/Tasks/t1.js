@@ -71,6 +71,12 @@ var data = [
 
 // ----------------------------------------------------------------------------
 
-let result = data.find((emp)=>emp.name == "Facebook").employees.map((e)=>e.id);
+// let result = data.find((emp)=>emp.name == "Facebook").employees.map((e)=>e.id);
+
+// console.log(result);
+
+// ----------------------------------------------------------------------------
+
+let result = data.map((emp)=>emp.employees).reduce((a , b)=>a + b.length , 0);
 
 console.log(result);
