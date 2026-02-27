@@ -40,3 +40,29 @@
 // console.log("The Multiplication is :",result2);
 
 // console.log("The Division is :",result3);
+
+// --------------------------------------------------------------------
+
+function call()
+{
+    console.log("The call Function to be Called...");
+}
+
+function test(a)
+{
+    console.log(a);
+}
+
+// test("Hello")
+
+// test(10)
+
+// test(14.56)
+
+// test(true)
+
+// test([10 , 20 , 30])
+
+test(call)
+
+// test(call())
